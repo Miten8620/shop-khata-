@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop Inventory</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+   
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body { 
+            display: flex; 
+            background-color: #081b29; 
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        /* --- SIDEBAR STYLES --- */
+        .sidebar { 
+            width: 260px; 
+            background: rgba(0, 0, 0, 0.2); 
+            border-right: 2px solid #0af;
+            box-shadow: 5px 0 15px rgba(0, 170, 255, 0.1);
+            padding: 30px 0; 
+            display: flex;
+            flex-direction: column;
+        }
+        .sidebar h2 { 
+            text-align: center; 
+            margin-bottom: 40px; 
+            color: #0af;
+            font-size: 32px;
+            text-shadow: 0 0 10px rgba(0, 170, 255, 0.5);
+        }
+        .sidebar ul { list-style: none; }
+        .sidebar ul li { 
+            padding: 15px 30px; 
+            border-bottom: 1px solid rgba(0, 170, 255, 0.2);
+            transition: .4s ease;
+        }
+        .sidebar ul li a { 
+            color: #fff; 
+            text-decoration: none; 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+            font-size: 16px;
+            transition: .4s ease;
+        }
+        .sidebar ul li a i {
+            font-size: 22px;
+            color: #0af;
+        }
+        .sidebar ul li:hover { 
+            background: rgba(0, 170, 255, 0.1); 
+            border-left: 4px solid #0af;
+        }
+        .sidebar ul li:hover a { color: #0af; }
+        
+        /* Highlight the active page in the sidebar */
+        .sidebar ul li.active {
+            background: rgba(0, 170, 255, 0.15);
+            border-left: 4px solid #0af;
+        }
+
+        /* --- MAIN CONTENT STYLES --- */
+        .main-content { 
+            flex: 1; 
+            padding: 30px 40px; 
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            background: transparent; 
+            padding: 20px 30px; 
+            border-radius: 10px; 
+            border: 2px solid #0af;
+            box-shadow: 0 0 15px rgba(0, 170, 255, 0.2);
+        }
+        .header h3 { font-size: 24px; font-weight: 500;}
+
+        /* Reusing your gradient button style for the Add button */
+        .add-btn { 
+            position: relative;
+            padding: 10px 25px;
+            background: transparent;
+            border: 2px solid #0af;
+            outline: none;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 16px;
+            color: #fff;
+            font-weight: 600;
+            text-decoration: none;
+            z-index: 1;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .add-btn::before {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            height: 300%;
+            background: linear-gradient(#081b29, #0af, #081b29, #0af);
+            z-index: -1;
+            transition: .5s;
+        }
+        .add-btn:hover::before { top: 0; }
+
+        /* --- TABLE STYLES --- */
+        .table-container {
+            background: transparent;
+            border: 2px solid #0af;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0, 170, 255, 0.1);
+            overflow-x: auto; /* Allows scrolling if table gets too wide */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 15px;
+            border-bottom: 1px solid rgba(0, 170, 255, 0.2);
+        }
+
+        th {
+            color: #0af;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+
+        tr:hover {
+            background: rgba(0, 170, 255, 0.05);
+        }
+
+        /* Status Badges */
+        .status {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .in-stock {
+            background: rgba(46, 204, 113, 0.1);
+            color: #2ecc71;
+            border: 1px solid #2ecc71;
+        }
+        .low-stock {
+            background: rgba(231, 76, 60, 0.1);
+            color: #e74c3c;
+            border: 1px solid #e74c3c;
+        }
+
+        /* Action Buttons */
+        .action-btn {
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: .3s ease;
+        }
+        .action-btn.edit:hover { color: #0af; text-shadow: 0 0 8px #0af;}
+        .action-btn.delete:hover { color: #e74c3c; text-shadow: 0 0 8px #e74c3c;}
+
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>My Shop</h2>
+        <ul>
+            <li><a href="dashboard.html"><i class='bx bxs-dashboard'></i> Dashboard</a></li>
+            
+            <li class="active"><a href="#"><i class='bx bx-box'></i> Inventory</a></li>
+            
+            <li><a href="#"><i class='bx bx-receipt'></i> Orders</a></li>
+            <li><a href="#"><i class='bx bx-cog'></i> Settings</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <h3>Inventory Management</h3>
+            <button class="add-btn"><i class='bx bx-plus-circle'></i> Add Product</button>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item ID</th>
+                        <th>Product Name</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Stock</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#1001</td>
+                        <td>Premium Cotton T-Shirt</td>
+                        <td>Clothing</td>
+                        <td>₹450</td>
+                        <td>120</td>
+                        <td><span class="status in-stock">In Stock</span></td>
+                        <td>
+                            <button class="action-btn edit"><i class='bx bx-edit'></i></button>
+                            <button class="action-btn delete"><i class='bx bx-trash'></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>#1002</td>
+                        <td>Wireless Earbuds</td>
+                        <td>Electronics</td>
+                        <td>₹1,200</td>
+                        <td>4</td>
+                        <td><span class="status low-stock">Low Stock</span></td>
+                        <td>
+                            <button class="action-btn edit"><i class='bx bx-edit'></i></button>
+                            <button class="action-btn delete"><i class='bx bx-trash'></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>#1003</td>
+                        <td>Leather Wallet</td>
+                        <td>Accessories</td>
+                        <td>₹850</td>
+                        <td>45</td>
+                        <td><span class="status in-stock">In Stock</span></td>
+                        <td>
+                            <button class="action-btn edit"><i class='bx bx-edit'></i></button>
+                            <button class="action-btn delete"><i class='bx bx-trash'></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>
