@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Login for Shop</title>
 <link rel="stylesheet" href="index2.css">
-<!-- Boxicons -->
+
 <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
 </head>
@@ -17,14 +17,14 @@
 
     <div class="form-box login">
       <h2 class="animation" style="--i:0;">Shop Login</h2>
-      <form action="#">
+      <form action="#" id="loginForm">
         <div class="input-box animation" style="--i:1;">
-          <input type="text" required>
+          <input type="text" id="login-identifier" required>
           <label>Email or Mobile No.</label>
           <i class='bx bxs-user'></i>
         </div>
         <div class="input-box animation" style="--i:2;">
-          <input type="password" required>
+          <input type="password" id="login-password" required>
           <label>Password</label>
           <i class='bx bxs-lock-alt'></i>
         </div>
@@ -42,26 +42,29 @@
 
     <div class="form-box register">
       <h2 class="animation" style="--i:17;">Register Shop</h2>
-      <form action="#">
+      <form action="#" id="registerForm">
         <div class="input-box animation" style="--i:18;">
-          <input type="text" required>
+          <input type="text" id="reg-shopname" required>
           <label>Shop Name</label>
-          <i class='bx bx-store-alt'></i> </div>
+          <i class='bx bx-store-alt'></i> 
+        </div>
         <div class="input-box animation" style="--i:19;">
-          <input type="text" required>
+          <input type="text" id="reg-owner" required>
           <label>Owner Name</label>
           <i class='bx bxs-user'></i>
         </div>
         <div class="input-box animation" style="--i:20;">
-          <input type="tel" pattern="[0-9]{10}" required> <label>Mobile Number</label>
-          <i class='bx bx-phone'></i> </div>
+          <input type="tel" id="reg-mobile" pattern="[0-9]{10}" required> 
+          <label>Mobile Number</label>
+          <i class='bx bx-phone'></i> 
+        </div>
         <div class="input-box animation" style="--i:21;">
-          <input type="email" required>
+          <input type="email" id="reg-email" required>
           <label>Email Address</label>
           <i class='bx bxs-envelope'></i>
         </div>
         <div class="input-box animation" style="--i:22;">
-          <input type="password" required>
+          <input type="password" id="reg-password" required>
           <label>Password</label>
           <i class='bx bxs-lock-alt'></i>
         </div>
@@ -82,3 +85,4 @@
 <script src="script.js"></script>
 </body>
 </html>
+<!-- ₹ -->

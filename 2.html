@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop Login</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+        body { 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            background-color: #081b29; 
+            color: #fff;
+        }
+
+        .auth-box {
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid #0af;
+            border-radius: 15px;
+            padding: 40px;
+            width: 400px;
+            box-shadow: 0 0 20px rgba(0, 170, 255, 0.2);
+            text-align: center;
+        }
+
+        .auth-box h2 {
+            color: #0af;
+            font-size: 32px;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px rgba(0, 170, 255, 0.5);
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px 40px 15px 20px;
+            background: transparent;
+            border: 1px solid rgba(0, 170, 255, 0.5);
+            border-radius: 40px;
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .input-group input:focus { border-color: #0af; box-shadow: 0 0 10px rgba(0, 170, 255, 0.3); }
+        .input-group i { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: #0af; font-size: 20px; }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: #0af;
+            border: none;
+            border-radius: 40px;
+            color: #081b29;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-bottom: 15px;
+        }
+
+        .btn:hover { box-shadow: 0 0 15px #0af; }
+
+        .toggle-link { color: #ccc; font-size: 14px; cursor: pointer; transition: 0.3s; }
+        .toggle-link:hover { color: #0af; text-decoration: underline; }
+        
+        /* Hide the register form by default */
+        #register-form { display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="auth-box">
+        <div id="login-form">
+            <h2>Shop Login</h2>
+            <div class="input-group">
+                <input type="text" id="login-username" placeholder="Username" required>
+                <i class='bx bxs-user'></i>
+            </div>
+            <div class="input-group">
+                <input type="password" id="login-password" placeholder="Password" required>
+                <i class='bx bxs-lock-alt'></i>
+            </div>
+            <button class="btn" onclick="login()">Login</button>
+            <p class="toggle-link" onclick="toggleForms()">Don't have an account? Register</p>
+        </div>
+
+        <div id="register-form">
+            <h2>Register Shop</h2>
+            <div class="input-group">
+                <input type="text" id="reg-username" placeholder="Choose a Username" required>
+                <i class='bx bxs-user'></i>
+            </div>
+            <div class="input-group">
+                <input type="password" id="reg-password" placeholder="Choose a Password" required>
+                <i class='bx bxs-lock-alt'></i>
+            </div>
+            <button class="btn" onclick="register()">Create Account</button>
+            <p class="toggle-link" onclick="toggleForms()">Already have an account? Login</p>
+        </div>
+    </div>
+
+    <script>
+        // 1. Function to switch between Login and Register views
+        function toggleForms() {
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            
+            if (loginForm.style.display === 'none') {
+                loginForm.style.display = 'block';
+                registerForm.style.display = 'none';
+            } else {
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'block';
+            }
+        }
+
+        // 2. Registration Logic
+        function register() {
+            const user = document.getElementById('reg-username').value;
+            const pass = document.getElementById('reg-password').value;
+
+            if (user === "" || pass === "") {
+                alert("Please fill in both fields.");
+                return;
+            }
+
+            // Save the credentials to localStorage
+            localStorage.setItem('savedUsername', user);
+            localStorage.setItem('savedPassword', pass);
+
+            alert("Account created successfully! Please login.");
+            toggleForms(); // Switch back to the login screen
+        }
+
+        // 3. Login Logic
+        function login() {
+            const user = document.getElementById('login-username').value;
+            const pass = document.getElementById('login-password').value;
+
+            // Retrieve the saved credentials from localStorage
+            const savedUser = localStorage.getItem('savedUsername');
+            const savedPass = localStorage.getItem('savedPassword');
+
+            // Check if what they typed matches what is saved
+            if (user === savedUser && pass === savedPass) {
+                // If it matches, send them to the dashboard!
+                window.location.href = "dashboard.html";
+            } else {
+                alert("Incorrect username or password. Or you haven't registered yet!");
+            }
+        }
+    </script>
+</body>
+</html>

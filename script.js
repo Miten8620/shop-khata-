@@ -253,5 +253,49 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+// ==========================================
+    // 4. SETTINGS PAGE LOGIC
+    // ==========================================
+    const settingsForm = document.getElementById('settingsForm');
 
+    if (settingsForm) {
+        // 1. Load saved data when the page opens (if any exists)
+        const savedProfile = localStorage.getItem('myShopProfile');
+        if (savedProfile) {
+            const parsedData = JSON.parse(savedProfile);
+            document.getElementById('set-shopname').value = parsedData.shopName || "";
+            document.getElementById('set-ownername').value = parsedData.ownerName || "";
+            document.getElementById('set-mobile').value = parsedData.mobile || "";
+            document.getElementById('set-email').value = parsedData.email || "";
+        }
+
+        // 2. Handle the Save button click
+        settingsForm.addEventListener('submit', (e) => {
+            e.preventDefault(); // Prevent page reload
+
+            // Grab the text from all 4 inputs
+            const shopName = document.getElementById('set-shopname').value.trim();
+            const ownerName = document.getElementById('set-ownername').value.trim();
+            const mobile = document.getElementById('set-mobile').value.trim();
+            const email = document.getElementById('set-email').value.trim();
+
+            // Double check if ANY of them are completely empty
+            if (shopName === "" || ownerName === "" || mobile === "" || email === "") {
+                alert("Please fill out all fields before saving!");
+                return; 
+            }
+
+            // Save the new data into the browser's memory
+            const profileData = {
+                shopName: shopName,
+                ownerName: ownerName,
+                mobile: mobile,
+                email: email
+            };
+            localStorage.setItem('myShopProfile', JSON.stringify(profileData));
+
+            // Show success message
+            alert("Settings saved successfully!");
+        });
+    }
 });

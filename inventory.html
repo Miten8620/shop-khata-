@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shop Inventory</title>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-   
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
 
@@ -120,7 +120,7 @@
             height: 300%;
             background: linear-gradient(#081b29, #0af, #081b29, #0af);
             z-index: -1;
-            transition: .5s;
+            transition: .5s; 
         }
         .add-btn:hover::before { top: 0; }
 
@@ -201,7 +201,7 @@
             
             <li><a href="payment.html"><i class='bx bx-rupee'></i> Payments</a></li>
             
-            <li><a href="#"><i class='bx bx-cog'></i> Settings</a></li>
+            <li><a href="settings.html"><i class='bx bx-cog'></i> Settings</a></li>
         </ul>
     </div>
 
@@ -265,6 +265,98 @@
             </table>
         </div>
     </div>
+       <script>
+        // --- 1. SETUP EXISTING BUTTONS (EDIT & DELETE) ---
+        // We will wrap the delete and edit logic in functions so we can reuse them!
 
+        function attachDeleteEvent(button) {
+            button.addEventListener('click', function() {
+                if (confirm('Are you sure you want to delete this product?')) {
+                    this.closest('tr').remove();
+                }
+            });
+        }
+
+        function attachEditEvent(button) {
+            button.addEventListener('click', function() {
+                const row = this.closest('tr');
+                const nameCell = row.cells[1];
+                const priceCell = row.cells[3];
+
+                let newName = prompt("Edit Product Name:", nameCell.innerText);
+                if (newName !== null && newName.trim() !== "") {
+                    nameCell.innerText = newName;
+                }
+
+                let newPrice = prompt("Edit Product Price:", priceCell.innerText);
+                if (newPrice !== null && newPrice.trim() !== "") {
+                    priceCell.innerText = newPrice;
+                }
+            });
+        }
+
+        // Attach events to all the buttons currently hardcoded in your HTML
+        document.querySelectorAll('.action-btn.delete').forEach(attachDeleteEvent);
+        document.querySelectorAll('.action-btn.edit').forEach(attachEditEvent);
+
+
+        // --- 2. ADD PRODUCT FUNCTIONALITY ---
+        const addBtn = document.querySelector('.add-btn');
+        const tableBody = document.querySelector('tbody');
+        
+        // We will start counting new IDs from 1004
+        let currentId = 1003; 
+
+        addBtn.addEventListener('click', function() {
+            // Ask the user for the new product details
+            const name = prompt("Enter Product Name:");
+            if (!name) return; // If they click cancel or leave it blank, stop the function
+
+            const category = prompt("Enter Category:");
+            const price = prompt("Enter Price (e.g., ₹500):");
+            const stock = parseInt(prompt("Enter Stock Quantity:"));
+
+            // Increase the ID number
+            currentId++;
+            const newId = "#" + currentId;
+
+            // Automatically decide the status badge based on the stock number
+            let statusHtml = '';
+            if (stock > 5) {
+                statusHtml = '<span class="status in-stock">In Stock</span>';
+            } else {
+                statusHtml = '<span class="status low-stock">Low Stock</span>';
+            }
+
+            // Create a brand new table row element
+            const newRow = document.createElement('tr');
+
+            // Fill the row with the HTML structure, inserting our new variables
+            newRow.innerHTML = `
+                <td>${newId}</td>
+                <td>${name}</td>
+                <td>${category}</td>
+                <td>${price}</td>
+                <td>${stock}</td>
+                <td>${statusHtml}</td>
+                <td>
+                    <button class="action-btn edit"><i class='bx bx-edit'></i></button>
+                    <button class="action-btn delete"><i class='bx bx-trash'></i></button>
+                </td>
+            `;
+
+            // Add the completely built row to the bottom of the table
+            tableBody.appendChild(newRow);
+
+            // CRITICAL STEP: The new row has new buttons. We must attach the click events to them!
+            const newDeleteBtn = newRow.querySelector('.delete');
+            const newEditBtn = newRow.querySelector('.edit');
+            
+            attachDeleteEvent(newDeleteBtn);
+            attachEditEvent(newEditBtn);
+        });
+    </script>
+</body>
+</html>
 </body>
 </html>
