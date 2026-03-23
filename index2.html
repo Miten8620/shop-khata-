@@ -81,7 +81,44 @@
     </div>
 
   </div>
+<script>
+  const form = document.getElementById("registerForm");
 
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const shopName = document.getElementById("reg-shopname").value;
+    const ownerName = document.getElementById("reg-owner").value;
+    const number = document.getElementById("reg-mobile").value;
+    const email = document.getElementById("reg-email").value;
+    const password = document.getElementById("reg-password").value;
+
+    if(!shopName || !ownerName || !number || !email || !password) {
+      alert("Please fill in all fields.");
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:3000/api/register', {
+        method : 'POST',
+        headers : {
+          'Content-Type': 'application/json'
+        },
+        body : JSON.stringify({shopName, ownerName, number, email, password})
+      })
+
+      console.log(response)
+
+      const data = await response.json();
+      console.log(data);
+      console.log("register successfully");
+      return;
+    } catch(err) {
+      console.log(err);
+      return;
+    }
+  })
+</script>
 <script src="script.js"></script>
 </body>
 </html>
