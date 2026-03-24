@@ -183,11 +183,133 @@
                     <label>Email Address</label>
                     <input type="email" value=" " required>
                 </div>
+                <div class="settings-card" style="margin-top: 30px;">
+            <h4 style="color: #0af; margin-bottom: 25px; font-size: 20px;">Security & Password</h4>
+            <form id="passwordForm">
+                <div class="form-group">
+                    <label>Current Password</label>
+                    <input type="password" id="currentPassword" required>
+                </div>
+                <div class="form-group">
+                    <label>New Password</label>
+                    <input type="password" id="newPassword" required>
+                </div>
+                <div class="form-group">
+                    <label>Confirm New Password</label>
+                    <input type="password" id="confirmPassword" required>
+                </div>
                 
+                <button type="submit" class="save-btn">Update Password</button>
+            </form>
+        </div>
+
+        <div class="settings-card" style="margin-top: 30px;">
+            <h4 style="color: #0af; margin-bottom: 25px; font-size: 20px;">Shop Branding</h4>
                 <button type="submit" class="save-btn" onclick="alert('Settings saved successfully!')">Save Changes</button>
             </form>
         </div>
     </div> 
+        <script>
+            // --- CONFIGURATION ---
+const API_URL = 'http://localhost:3000';
+const SHOP_ID = 1; // Hardcoded for testing. Use localStorage.getItem('shop_id') later!
+
+// --- DOM ELEMENTS: PROFILE ---
+const settingsForm = document.getElementById('settingsForm');
+const shopNameInput = document.getElementById('shopName');
+const ownerNameInput = document.getElementById('ownerName');
+const mobileInput = document.getElementById('mobileNum');
+const emailInput = document.getElementById('emailAdd');
+
+// --- DOM ELEMENTS: PASSWORD ---
+const passwordForm = document.getElementById('passwordForm');
+const currentPasswordInput = document.getElementById('currentPassword');
+const newPasswordInput = document.getElementById('newPassword');
+const confirmPasswordInput = document.getElementById('confirmPassword');
+
+// --- 1. LOAD DATA: PRE-FILL THE PROFILE FORM ---
+async function loadShopProfile() {
+    try {
+        const response = await fetch(`${API_URL}/api/shop/${SHOP_ID}`);
+        if (response.ok) {
+            const shopData = await response.json();
+            
+            // Fill the inputs with the data from MySQL
+            shopNameInput.value = shopData.shop_name;
+            ownerNameInput.value = shopData.owner_name;
+            mobileInput.value = shopData.mobile;
+            emailInput.value = shopData.email;
+        }
+    } catch (error) {
+        console.error('Error loading profile:', error);
+    }
+}
+
+// --- 2. UPDATE DATA: SAVE PROFILE SETTINGS ---
+settingsForm.addEventListener('submit', async (e) => {
+    e.preventDefault(); 
+
+    try {
+        const response = await fetch(`${API_URL}/api/shop/${SHOP_ID}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                shopName: shopNameInput.value,
+                ownerName: ownerNameInput.value,
+                mobile: mobileInput.value,
+                email: emailInput.value
+            })
+        });
+
+        const data = await response.json();
+        
+        if (response.ok) {
+            alert('Profile saved successfully!'); 
+        } else {
+            alert('Error: ' + data.error);
+        }
+    } catch (error) {
+        console.error('Error saving settings:', error);
+    }
+});
+
+// --- 3. UPDATE PASSWORD ---
+passwordForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const currentPassword = currentPasswordInput.value;
+    const newPassword = newPasswordInput.value;
+    const confirmPassword = confirmPasswordInput.value;
+
+    // Basic frontend validation
+    if (newPassword !== confirmPassword) {
+        alert("New passwords do not match!");
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_URL}/api/shop/${SHOP_ID}/password`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ currentPassword, newPassword })
+        });
+
+        const data = await response.json();
+        
+        if (response.ok) {
+            alert(data.message); // Success!
+            passwordForm.reset(); // Clear the password fields
+        } else {
+            alert('Error: ' + data.error);
+        }
+    } catch (error) {
+        console.error('Error updating password:', error);
+    }
+});
+
+// --- START ---
+loadShopProfile(); // Run this immediately to fetch the user's info
+        </script>
 
     <script src="script.js"></script>
 </body>

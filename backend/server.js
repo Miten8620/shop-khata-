@@ -150,7 +150,146 @@ app.delete('/products/:id', async (req, res) => {
         res.status(500).json({ error: 'Failed to delete product' });
     }
 });
+  // ==========================================
+// PAYMENTS & UDHAAR ROUTES
+// ==========================================
 
+// 1. READ: Get all payments for a specific shop
+app.get('/payments/:shop_id', async (req, res) => {
+    try {
+        const conn = await connectDB();
+        const shopId = req.params.shop_id;
+        
+        const sql = 'SELECT * FROM payments WHERE shop_id = ? ORDER BY created_at DESC';
+        const [results] = await conn.execute(sql, [shopId]);
+        
+        res.status(200).json(results);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to retrieve payments' });
+    }
+});
+
+// 2. CREATE: Add a new payment record
+app.post('/payments', async (req, res) => {
+    try {
+        const conn = await connectDB();
+        const { shop_id, customerName, mobileNo, amount, paymentType } = req.body;
+        
+        const sql = 'INSERT INTO payments (shop_id, customer_name, mobile_no, amount, payment_type) VALUES (?, ?, ?, ?, ?)';
+        const [result] = await conn.execute(sql, [shop_id, customerName, mobileNo, amount, paymentType]);
+        
+        res.status(201).json({ message: 'Payment recorded!', id: result.insertId });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to add payment' });
+    }
+});
+
+// 3. UPDATE: Edit a payment record
+app.put('/payments/:id', async (req, res) => {
+    try {
+        const conn = await connectDB();
+        const paymentId = req.params.id;
+        const { shop_id, customerName, mobileNo, amount, paymentType } = req.body;
+
+        const sql = 'UPDATE payments SET customer_name = ?, mobile_no = ?, amount = ?, payment_type = ? WHERE id = ? AND shop_id = ?';
+        const [result] = await conn.execute(sql, [customerName, mobileNo, amount, paymentType, paymentId, shop_id]);
+        
+        res.status(200).json({ message: 'Payment updated!' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to update payment' });
+    }
+});
+
+// 4. DELETE: Remove a payment record
+app.delete('/payments/:id', async (req, res) => {
+    try {
+        const conn = await connectDB();
+        const paymentId = req.params.id;
+        const { shop_id } = req.body; 
+
+        const sql = 'DELETE FROM payments WHERE id = ? AND shop_id = ?';
+        const [result] = await conn.execute(sql, [paymentId, shop_id]);
+        
+        res.status(200).json({ message: 'Payment deleted!' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to delete payment' });
+    }
+});
+  // ==========================================
+// SHOP SETTINGS / PROFILE ROUTES
+// ==========================================
+
+// 1. READ: Get shop profile details to pre-fill the form
+app.get('/api/shop/:id', async (req, res) => {
+    try {
+        const conn = await connectDB();
+        const shopId = req.params.id;
+        
+        const sql = 'SELECT id, shop_name, owner_name, mobile, email FROM shops WHERE id = ?';
+        const [results] = await conn.execute(sql, [shopId]);
+        
+        if (results.length === 0) return res.status(404).json({ error: 'Shop not found' });
+        
+        res.status(200).json(results[0]);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to retrieve shop profile' });
+    }
+});
+
+// 2. UPDATE: Save new shop details (Name, Email, etc.)
+app.put('/api/shop/:id', async (req, res) => {
+    try {
+        const conn = await connectDB();
+        const shopId = req.params.id;
+        const { shopName, ownerName, mobile, email } = req.body;
+
+        const sql = 'UPDATE shops SET shop_name = ?, owner_name = ?, mobile = ?, email = ? WHERE id = ?';
+        await conn.execute(sql, [shopName, ownerName, mobile, email, shopId]);
+        
+        res.status(200).json({ message: 'Profile updated successfully!' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to update profile' });
+    }
+});
+
+// 3. UPDATE PASSWORD: Securely change the password
+app.put('/api/shop/:id/password', async (req, res) => {
+    try {
+        const conn = await connectDB();
+        const shopId = req.params.id;
+        const { currentPassword, newPassword } = req.body;
+
+        // Fetch the user's current hashed password
+        const sql = 'SELECT password FROM shops WHERE id = ?';
+        const [results] = await conn.execute(sql, [shopId]);
+        
+        if (results.length === 0) return res.status(404).json({ error: 'Shop not found' });
+        
+        const user = results[0];
+
+        // Verify the old password matches what is in the database
+        const isMatch = await bcrypt.compare(currentPassword, user.password);
+        if (!isMatch) {
+            return res.status(401).json({ error: 'Incorrect current password!' });
+        }
+
+        // Hash the NEW password and save it
+        const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+        const updateSql = 'UPDATE shops SET password = ? WHERE id = ?';
+        await conn.execute(updateSql, [hashedNewPassword, shopId]);
+
+        res.status(200).json({ message: 'Password updated securely!' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to update password' });
+    }
+});
 // --- START SERVER ---
 app.listen(3000, () => {
   console.log("Server started on port 3000");

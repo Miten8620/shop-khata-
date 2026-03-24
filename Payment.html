@@ -248,6 +248,159 @@
             </form>
         </div>
     </div>
+    <script>
+        // --- CONFIGURATION ---
+const API_URL = 'http://localhost:3000';
+const SHOP_ID = 1; // Hardcoded for testing. Use localStorage.getItem('shop_id') later!
+
+// --- DOM ELEMENTS ---
+const tableBody = document.getElementById('paymentTableBody');
+const modal = document.getElementById('paymentModal');
+const openModalBtn = document.getElementById('openPaymentModal');
+const closeModalBtn = document.getElementById('closePaymentModal');
+const paymentForm = document.getElementById('paymentForm');
+
+// --- MODAL LOGIC ---
+openModalBtn.addEventListener('click', () => {
+    paymentForm.reset(); // Clear the form
+    delete paymentForm.dataset.editId; // Clear any edit state
+    modal.style.display = 'flex';
+});
+
+closeModalBtn.addEventListener('click', () => {
+    modal.style.display = 'none';
+});
+
+window.addEventListener('click', (e) => {
+    if (e.target === modal) modal.style.display = 'none';
+});
+
+// --- Helper: Format Date ---
+function formatDate(dateString) {
+    const options = { day: '2-digit', month: 'short', year: 'numeric' };
+    return new Date(dateString).toLocaleDateString('en-GB', options).replace(/ /g, '-');
+}
+
+// --- 1. READ: LOAD PAYMENTS FROM DATABASE ---
+async function fetchPayments() {
+    try {
+        const response = await fetch(`${API_URL}/payments/${SHOP_ID}`);
+        const payments = await response.json();
+        
+        tableBody.innerHTML = ''; // Clear hardcoded rows
+        
+        payments.forEach(payment => renderPaymentRow(payment));
+    } catch (error) {
+        console.error('Error loading payments:', error);
+    }
+}
+
+// Function to draw a single row
+function renderPaymentRow(payment) {
+    const row = document.createElement('tr');
+    
+    // Set status badge based on type
+    let statusHtml = payment.payment_type === 'received' 
+        ? '<span class="status received">Payment Received</span>' 
+        : '<span class="status udhaar">Udhaar (Due)</span>';
+
+    row.innerHTML = `
+        <td>${formatDate(payment.created_at)}</td>
+        <td class="p-name">${payment.customer_name}</td>
+        <td class="p-mob">${payment.mobile_no}</td>
+        <td class="p-amt">₹${payment.amount}</td>
+        <td class="p-type" data-value="${payment.payment_type}">${statusHtml}</td>
+        <td>
+            <button class="action-btn edit" data-id="${payment.id}"><i class='bx bx-edit'></i></button>
+            <button class="action-btn delete" data-id="${payment.id}"><i class='bx bx-trash'></i></button>
+        </td>
+    `;
+
+    tableBody.appendChild(row);
+
+    // Attach click events
+    row.querySelector('.delete').addEventListener('click', () => deletePayment(payment.id));
+    row.querySelector('.edit').addEventListener('click', () => openEditModal(payment, row));
+}
+
+// --- 2. CREATE & UPDATE: SUBMIT FORM ---
+paymentForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const customerName = document.getElementById('custName').value;
+    const mobileNo = document.getElementById('custMobile').value;
+    const amount = document.getElementById('payAmount').value;
+    const paymentType = document.getElementById('payType').value;
+
+    const editId = paymentForm.dataset.editId; // Check if we are editing
+
+    try {
+        let response;
+        if (editId) {
+            // UPDATE Existing
+            response = await fetch(`${API_URL}/payments/${editId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ shop_id: SHOP_ID, customerName, mobileNo, amount, paymentType })
+            });
+        } else {
+            // CREATE New
+            response = await fetch(`${API_URL}/payments`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ shop_id: SHOP_ID, customerName, mobileNo, amount, paymentType })
+            });
+        }
+
+        if (response.ok) {
+            modal.style.display = 'none';
+            fetchPayments(); // Refresh the table
+        } else {
+            alert('Failed to save payment to database.');
+        }
+    } catch (error) {
+        console.error('Error saving payment:', error);
+    }
+});
+
+// --- 3. PREPARE EDIT MODAL ---
+function openEditModal(payment, row) {
+    // Pre-fill the form with existing data
+    document.getElementById('custName').value = payment.customer_name;
+    document.getElementById('custMobile').value = payment.mobile_no;
+    document.getElementById('payAmount').value = payment.amount;
+    document.getElementById('payType').value = payment.payment_type;
+    
+    // Save the ID so the submit handler knows we are updating, not creating
+    paymentForm.dataset.editId = payment.id; 
+    
+    modal.style.display = 'flex';
+}
+
+// --- 4. DELETE PAYMENT ---
+async function deletePayment(id) {
+    if (!confirm('Are you sure you want to delete this record forever?')) return;
+
+    try {
+        const response = await fetch(`${API_URL}/payments/${id}`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ shop_id: SHOP_ID })
+        });
+
+        if (response.ok) {
+            fetchPayments(); // Refresh table
+        } else {
+            alert('Failed to delete from database.');
+        }
+    } catch (error) {
+        console.error('Error deleting payment:', error);
+    }
+}
+
+// --- START ---
+fetchPayments(); // Load data on page load
+    </script>
 
     <script src="script.js"></script>
 </body>
