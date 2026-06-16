@@ -7,7 +7,6 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
    
     <style>
-        /* Import the same Poppins font used in the login page */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
 
         * {
@@ -17,7 +16,6 @@
             font-family: 'Poppins', sans-serif;
         }
 
-        /* Match the deep blue background */
         body { 
             display: flex; 
             background-color: #081b29; 
@@ -25,7 +23,6 @@
             min-height: 100vh;
         }
 
-        /* Sidebar Styling with a glowing border */
         .sidebar { 
             width: 260px; 
             background: rgba(0, 0, 0, 0.2); 
@@ -61,14 +58,12 @@
             font-size: 22px;
             color: #0af;
         }
-        /* Hover effects for the sidebar */
         .sidebar ul li:hover { 
             background: rgba(0, 170, 255, 0.1); 
             border-left: 4px solid #0af;
         }
         .sidebar ul li:hover a { color: #0af; }
 
-        /* Main Content Area */
         .main-content { 
             flex: 1; 
             padding: 30px 40px; 
@@ -77,7 +72,6 @@
             gap: 30px;
         }
 
-        /* Header matching the glowing box style */
         .header { 
             display: flex; 
             justify-content: space-between; 
@@ -90,36 +84,6 @@
         }
         .header h3 { font-size: 24px; font-weight: 500;}
 
-        /* Logout Button matching your login .btn style */
-        .logout-btn { 
-            position: relative;
-            padding: 10px 25px;
-            background: transparent;
-            border: 2px solid #0af;
-            outline: none;
-            border-radius: 40px;
-            cursor: pointer;
-            font-size: 16px;
-            color: #fff;
-            font-weight: 600;
-            text-decoration: none;
-            z-index: 1;
-            overflow: hidden;
-        }
-        .logout-btn::before {
-            content: '';
-            position: absolute;
-            top: -100%;
-            left: 0;
-            width: 100%;
-            height: 300%;
-            background: linear-gradient(#081b29, #0af, #081b29, #0af);
-            z-index: -1;
-            transition: .5s;
-        }
-        .logout-btn:hover::before { top: 0; }
-
-        /* Dashboard Cards with neon borders and hover glow */
         .cards { 
             display: flex; 
             gap: 30px; 
@@ -142,7 +106,7 @@
         }
         .card i { 
             margin-bottom: 15px;
-            text-shadow: 0 0 10px currentColor; /* Gives the icons a slight glow */
+            text-shadow: 0 0 10px currentColor;
         }
         .card h3 { 
             color: #fff; 
@@ -164,39 +128,123 @@
         <h2>My Shop</h2>
         <ul>
             <li class="active"><a href="dashboard.html"><i class='bx bxs-dashboard'></i> Dashboard</a></li>
-            
             <li><a href="inventory.html"><i class='bx bx-box'></i> Inventory</a></li>
-            
             <li><a href="payment.html"><i class='bx bx-rupee'></i> Payments</a></li>
-            
-            <li><a href="settings.html"><i class='bx bx-cog'></i> Settings</a></li>
         </ul>
     </div>
 
     <div class="main-content">
         <div class="header">
-            <h3>Welcome Back, Shop Owner!</h3>
-            <a href="index2.html" class="logout-btn">Logout</a>
+            <h3 id="welcome-text">Loading Shop Details...</h3>
         </div>
 
         <div class="cards">
             <div class="card">
-                <i class='bx bxs-user ' style="font-size: 45px; color: #3498db;"></i>
-                <h3>Customer Name</h3>
-                <p>Tirth Parekh</p>
-                <p>7600721592</p>
+                <i class='bx bxs-store' style="font-size: 45px; color: #3498db;"></i>
+                <h3 id="shop-name">Shop Name</h3>
+                <p id="owner-name" style="font-size: 20px;">Owner Name</p>
+                <p id="shop-mobile" style="font-size: 16px; margin-top: 5px;">Mobile</p>
             </div>
+            <div class="card">
+    <i class='bx bx-package' style="font-size: 45px; color: #f1c40f;"></i>
+    <h3>Total Products</h3>
+    <p id="total-products">0</p>
+</div>
             <div class="card">
                 <i class='bx bx-dollar-circle' style="font-size: 45px; color: #2ecc71;"></i>
-                <h3>Udhaar</h3>
-                <p>₹12,000</p> </div>
+                <h3>Total Udhaar</h3>
+                <p id="total-udhaar">₹0</p> 
+            </div>
+            
             <div class="card">
                 <i class='bx bx-rupee' style="font-size: 45px; color: #e74c3c;"></i>
-                <h3>Payment</h3>
-                <p>₹5,000</p>
+                <h3>Total Payment Paid</h3>
+                <p id="total-paid">₹0</p>
             </div>
+            <div class="card">
+    <i class='bx bx-wallet' style="font-size: 45px; color: #9b59b6;"></i>
+    <h3>Inventory Value</h3>
+    <p id="inventory-value">₹0</p>
+</div>
+<div class="card">
+    <i class='bx bx-error-circle' style="font-size: 45px; color: #e74c3c;"></i>
+    <h3>Low Stock Items</h3>
+    <p id="low-stock-count">0</p>
+</div>
         </div>
     </div>
 
+    <script>
+        // Since we are skipping login, we hardcode shop_id = 1 for testing
+        const SHOP_ID = 1; 
+        const BASE_URL = 'http://localhost:3000';
+
+        // This function automatically runs when the page loads
+        document.addEventListener('DOMContentLoaded', async () => {
+            await fetchShopProfile();
+            await fetchDashboardMetrics();
+        });
+
+        // 1. Fetch the Shop Owner's profile details
+        async function fetchShopProfile() {
+            try {
+                const response = await fetch(`${BASE_URL}/api/shop/${SHOP_ID}`);
+                if (response.ok) {
+                    const shop = await response.json();
+                    
+                    // Update the HTML text with database values
+                    document.getElementById('welcome-text').innerText = `Welcome Back, ${shop.owner_name}!`;
+                    document.getElementById('shop-name').innerText = shop.shop_name;
+                    document.getElementById('owner-name').innerText = shop.owner_name;
+                    document.getElementById('shop-mobile').innerText = shop.mobile;
+                }
+            } catch (error) {
+                console.error("Error fetching shop profile:", error);
+            }
+        }
+
+        // 2. Fetch payments, then calculate total Udhaar and total Paid
+        async function fetchDashboardMetrics() {
+            try {
+                const response = await fetch(`${BASE_URL}/payments/${SHOP_ID}`);
+                if (response.ok) {
+                    const payments = await response.json();
+                    const productResponse = await fetch(`${BASE_URL}/products/${SHOP_ID}`);
+                    const products = await productResponse.json();
+                    let totalUdhaar = 0;
+                    let totalPaid = 0;
+                    let inventoryValue = 0;
+                    const totalProducts = products.length;
+                    // Loop through all database records and add up values
+                    payments.forEach(record => {
+                        // Ensure it behaves as a number, not text
+                        const amount = Number(record.amount); 
+                        
+                        if (record.payment_type.toLowerCase() === 'udhaar') {
+                            totalUdhaar += amount;
+                        } else {
+                            totalPaid += amount;
+                        }
+                    });
+                    products.forEach(product => {
+
+    const value = Number(product.price) * Number(product.stock);
+
+    inventoryValue += value;
+});
+                    // Format numbers neatly (e.g., ₹12,000)
+                    document.getElementById('total-udhaar').innerText = `₹${totalUdhaar.toLocaleString()}`;
+                    document.getElementById('total-paid').innerText = `₹${totalPaid.toLocaleString()}`;
+                    document.getElementById('total-products').innerText = totalProducts;
+                    document.getElementById('inventory-value').innerText =
+    `₹${inventoryValue.toLocaleString()}`;
+                    document.getElementById('inventory-value').innerText =
+    `₹${inventoryValue.toLocaleString()}`;
+                }
+            } catch (error) {
+                console.error("Error fetching dashboard calculations:", error);
+            }
+        }
+    </script>
 </body>
 </html>

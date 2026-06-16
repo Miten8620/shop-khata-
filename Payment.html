@@ -193,28 +193,7 @@
                     </tr>
                 </thead>
                 <tbody id="paymentTableBody">
-                    <tr>
-                        <td>18-Mar-2026</td>
-                        <td>Tirth Parekh</td>
-                        <td>9876543210</td>
-                        <td>₹5,000</td>
-                        <td><span class="status received">Payment Received</span></td>
-                        <td>
-                            <button class="action-btn edit"><i class='bx bx-edit'></i></button>
-                            <button class="action-btn delete"><i class='bx bx-trash'></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>17-Mar-2026</td>
-                        <td>Rahul Sharma</td>
-                        <td>9123456789</td>
-                        <td>₹1,500</td>
-                        <td><span class="status udhaar">Udhaar (Due)</span></td>
-                        <td>
-                            <button class="action-btn edit"><i class='bx bx-edit'></i></button>
-                            <button class="action-btn delete"><i class='bx bx-trash'></i></button>
-                        </td>
-                    </tr>
+                   
                 </tbody>
             </table>
         </div>
@@ -251,7 +230,7 @@
     <script>
         // --- CONFIGURATION ---
 const API_URL = 'http://localhost:3000';
-const SHOP_ID = 1; // Hardcoded for testing. Use localStorage.getItem('shop_id') later!
+const SHOP_ID = localStorage.getItem('shop_id') || 1; // Hardcoded for testing. Use localStorage.getItem('shop_id') later!
 
 // --- DOM ELEMENTS ---
 const tableBody = document.getElementById('paymentTableBody');
