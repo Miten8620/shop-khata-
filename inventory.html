@@ -1,102 +1,316 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Shop Inventory</title>
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { display: flex; background-color: #081b29; color: #fff; min-height: 100vh; }
-        
-        .sidebar { width: 260px; background: rgba(0, 0, 0, 0.2); border-right: 2px solid #0af; padding: 30px 0; display: flex; flex-direction: column;}
-        .sidebar h2 { text-align: center; margin-bottom: 40px; color: #0af; font-size: 32px;}
-        .sidebar ul { list-style: none; }
-        .sidebar ul li { padding: 15px 30px; border-bottom: 1px solid rgba(0, 170, 255, 0.2); }
-        .sidebar ul li a { color: #fff; text-decoration: none; display: flex; align-items: center; gap: 15px; }
-        .sidebar ul li a i { font-size: 22px; color: #0af; }
-        
-        .main-content { flex: 1; padding: 30px 40px; display: flex; flex-direction: column; gap: 30px; }
-        
-        /* Simple styled form */
-        .form-container { border: 2px solid #0af; padding: 20px; border-radius: 10px; background: rgba(0,0,0,0.2); }
-        .form-container h3 { margin-bottom: 15px; color: #0af; }
-        .form-group { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 15px; }
-        .form-group input { padding: 10px; border: 1px solid #0af; background: transparent; color: #fff; border-radius: 5px; outline: none; }
-        .btn { padding: 10px 20px; background: #0af; border: none; color: #081b29; font-weight: bold; border-radius: 5px; cursor: pointer; }
-        
-        /* Styled Inventory Table */
-        table { width: 100%; border-collapse: collapse; border: 2px solid #0af; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid rgba(0, 170, 255, 0.2); }
-        th { background: rgba(0, 170, 255, 0.2); color: #0af; }
-        .delete-btn { color: #e74c3c; cursor: pointer; font-size: 18px; border: none; background: transparent; }
-    </style>
-</head>
-<body>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+      body {
+        display: flex;
+        background-color: #081b29;
+        color: #fff;
+        min-height: 100vh;
+      }
 
+      .sidebar {
+        width: 260px;
+        background: rgba(0, 0, 0, 0.2);
+        border-right: 2px solid #0af;
+        padding: 30px 0;
+        display: flex;
+        flex-direction: column;
+      }
+      .sidebar h2 {
+        text-align: center;
+        margin-bottom: 40px;
+        color: #0af;
+        font-size: 32px;
+      }
+      .sidebar ul {
+        list-style: none;
+      }
+      .sidebar ul li {
+        padding: 15px 30px;
+        border-bottom: 1px solid rgba(0, 170, 255, 0.2);
+      }
+      .sidebar ul li a {
+        color: #fff;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+      .sidebar ul li a i {
+        font-size: 22px;
+        color: #0af;
+      }
+
+      .main-content {
+        flex: 1;
+        padding: 30px 40px;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+      }
+
+      /* Simple styled form */
+      .form-container {
+        border: 2px solid #0af;
+        padding: 20px;
+        border-radius: 10px;
+        background: rgba(0, 0, 0, 0.2);
+      }
+      .form-container h3 {
+        margin-bottom: 15px;
+        color: #0af;
+      }
+      .form-group {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+        margin-bottom: 15px;
+      }
+      .form-group input {
+        padding: 10px;
+        border: 1px solid #0af;
+        background: transparent;
+        color: #fff;
+        border-radius: 5px;
+        outline: none;
+      }
+      .btn {
+        padding: 10px 20px;
+        background: #0af;
+        border: none;
+        color: #081b29;
+        font-weight: bold;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      /* Styled Inventory Table */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        border: 2px solid #0af;
+      }
+      th,
+      td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid rgba(0, 170, 255, 0.2);
+      }
+      th {
+        background: rgba(0, 170, 255, 0.2);
+        color: #0af;
+      }
+      .delete-btn {
+        color: #e74c3c;
+        cursor: pointer;
+        font-size: 18px;
+        border: none;
+        background: transparent;
+      }
+    </style>
+  </head>
+  <body>
     <div class="sidebar">
-        <h2>My Shop</h2>
-        <ul>
-            <li><a href="dashboard.html"><i class='bx bxs-dashboard'></i> Dashboard</a></li>
-            <li class="active"><a href="inventory.html"><i class='bx bx-box'></i> Inventory</a></li>
-            <li><a href="payment.html"><i class='bx bx-rupee'></i> Payments</a></li>
-        </ul>
+      <h2>My Shop</h2>
+      <ul>
+        <li>
+          <a href="dashboard.html"
+            ><i class="bx bxs-dashboard"></i> Dashboard</a
+          >
+        </li>
+        <li class="active">
+          <a href="inventory.html"><i class="bx bx-box"></i> Inventory</a>
+        </li>
+        <li>
+          <a href="payment.html"><i class="bx bx-rupee"></i> Payments</a>
+        </li>
+      </ul>
     </div>
 
     <div class="main-content">
-        <h2>Inventory Management</h2>
+      <h2>Inventory Management</h2>
 
-        <div class="form-container">
-            <h3>Add New Product</h3>
-            <form id="product-form">
-                <div class="form-group">
-                    <input type="text" id="prod-name" placeholder="Product Name" required>
-                    <input type="text" id="prod-category" placeholder="Category" required>
-                    <input type="number" id="prod-price" placeholder="Price" required>
-                    <input type="number" id="prod-stock" placeholder="Stock Qty" required>
-                </div>
-                <button type="submit" class="btn">Save Product</button>
-            </form>
-        </div>
-
-        <table id="product-table">
-            <thead>
-                <tr>
-                    <th>Product Name</th>
-                    <th>Category</th>
-                    <th>Price</th>
-                    <th>Stock</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                </tbody>
-        </table>
+      <div class="form-container">
+        <h3>Add New Product</h3>
+        <form id="product-form">
+          <div class="form-group">
+            <input
+              type="text"
+              id="prod-name"
+              placeholder="Product Name"
+              required
+            />
+            <input
+              type="text"
+              id="prod-category"
+              placeholder="Category"
+              required
+            />
+            <input type="number" id="prod-price" placeholder="Price" required />
+            <input
+              type="number"
+              id="prod-stock"
+              placeholder="Stock Qty"
+              required
+            />
+          </div>
+          <button type="submit" class="btn">Save Product</button>
+        </form>
+      </div>
+      <input
+        type="text"
+        id="search-product"
+        placeholder="Search Product..."
+        style="
+          width: 300px;
+          padding: 10px;
+          margin-bottom: 15px;
+          border: 1px solid #0af;
+          border-radius: 5px;
+          background: transparent;
+          color: white;
+          outline: none;
+        "
+      />
+      <table id="product-table">
+        <thead>
+          <tr>
+            <th>Product Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
     </div>
 
     <script>
-        const SHOP_ID = localStorage.getItem('shop_id') ||  1; 
-        const BASE_URL = 'http://localhost:3000';
+      const SHOP_ID = localStorage.getItem("shop_id") || 1;
+      const BASE_URL = "http://localhost:3000";
+      let allProducts = [];
+      let inventoryChart;
 
-        document.addEventListener('DOMContentLoaded', () => {
-            fetchProducts();
+      document.addEventListener("DOMContentLoaded", () => {
+        fetchProducts();
 
-            // Listen for form submission to add products
-            document.getElementById('product-form').addEventListener('submit', addProduct);
+        // Listen for form submission to add products
+        document
+          .getElementById("product-form")
+          .addEventListener("submit", addProduct);
+        document
+          .getElementById("search-product")
+          .addEventListener("input", searchProducts);
+      });
+      function createInventoryChart(products) {
+        const categoryTotals = {};
+
+        products.forEach((product) => {
+          const category = product.category;
+
+          const stock = Number(product.stock);
+
+          if (categoryTotals[category]) {
+            categoryTotals[category] += stock;
+          } else {
+            categoryTotals[category] = stock;
+          }
         });
 
-        // 1. READ Operation: Fetch products from database and add to table
-        async function fetchProducts() {
-            try {
-                const response = await fetch(`${BASE_URL}/products/${SHOP_ID}`);
-                if (response.ok) {
-                    const products = await response.json();
-                    const tbody = document.querySelector('#product-table tbody');
-                    tbody.innerHTML = ''; // Clear existing hardcoded rows
+        const labels = Object.keys(categoryTotals);
 
-                    products.forEach(p => {
-                        const row = `
+        const values = Object.values(categoryTotals);
+
+        const ctx = document.getElementById("inventoryChart").getContext("2d");
+
+        if (inventoryChart) {
+          inventoryChart.destroy();
+        }
+
+        inventoryChart = new Chart(ctx, {
+          type: "bar",
+
+          data: {
+            labels: labels,
+
+            datasets: [
+              {
+                label: "Stock Quantity",
+
+                data: values,
+
+                backgroundColor: [
+                  "#0af",
+                  "#2ecc71",
+                  "#f1c40f",
+                  "#e74c3c",
+                  "#9b59b6",
+                  "#1abc9c",
+                ],
+
+                borderWidth: 1,
+              },
+            ],
+          },
+
+          options: {
+            responsive: true,
+
+            plugins: {
+              legend: {
+                labels: {
+                  color: "white",
+                },
+              },
+            },
+
+            scales: {
+              x: {
+                ticks: {
+                  color: "white",
+                },
+              },
+
+              y: {
+                beginAtZero: true,
+
+                ticks: {
+                  color: "white",
+                },
+              },
+            },
+          },
+        });
+      }
+
+      // 1. READ Operation: Fetch products from database and add to table
+      async function fetchProducts() {
+        try {
+          const response = await fetch(`${BASE_URL}/products/${SHOP_ID}`);
+          if (response.ok) {
+            const products = await response.json();
+            allProducts = products;
+            const tbody = document.querySelector("#product-table tbody");
+            tbody.innerHTML = ""; // Clear existing hardcoded rows
+
+            products.forEach((p) => {
+              const row = `
                             <tr>
                                 <td>${p.product_name}</td>
                                 <td>${p.category}</td>
@@ -113,84 +327,159 @@
 </td>
                             </tr>
                         `;
-                        tbody.innerHTML += row;
-                    });
-                }
-            } catch (err) {
-                console.error("Error reading products:", err);
-            }
+              tbody.innerHTML += row;
+            });
+          }
+        } catch (err) {
+          console.error("Error reading products:", err);
+        }
+      }
+
+      // 2. CREATE Operation: Add new product to backend via form submission
+      async function addProduct(e) {
+        e.preventDefault(); // Stop page from refreshing on form click
+        const form = document.getElementById("product-form");
+        const editId = form.dataset.editId;
+        const payload = {
+          shop_id: SHOP_ID,
+          productName: document.getElementById("prod-name").value,
+          category: document.getElementById("prod-category").value,
+          price: document.getElementById("prod-price").value,
+          stock: document.getElementById("prod-stock").value,
+        };
+
+        try {
+          const response = await fetch(
+            editId ? `${BASE_URL}/products/${editId}` : `${BASE_URL}/products`,
+
+            {
+              method: editId ? "PUT" : "POST",
+
+              headers: {
+                "Content-Type": "application/json",
+              },
+
+              body: JSON.stringify(payload),
+            },
+          );
+
+          if (response.ok) {
+            alert("Product Added Successfully!");
+            document.getElementById("product-form").reset(); // Clear inputs
+            form.reset();
+            delete form.dataset.editId;
+            fetchProducts(); // Refresh list to display it right away
+          }
+        } catch (err) {
+          console.error("Error creating product:", err);
+        }
+      }
+      function editProduct(id, name, category, price, stock) {
+        // Fill form inputs with existing values
+        document.getElementById("prod-name").value = name;
+        document.getElementById("prod-category").value = category;
+        document.getElementById("prod-price").value = price;
+        document.getElementById("prod-stock").value = stock;
+
+        // Save product id temporarily
+        document.getElementById("product-form").dataset.editId = id;
+      }
+      // 3. DELETE Operation: Remove a product
+      function searchProducts() {
+        const searchValue = document
+          .getElementById("search-product")
+          .value.toLowerCase();
+
+        const tbody = document.querySelector("#product-table tbody");
+
+        tbody.innerHTML = "";
+
+        const filteredProducts = allProducts.filter((product) =>
+          product.product_name.toLowerCase().includes(searchValue),
+        );
+
+        filteredProducts.forEach((p) => {
+          const row = `
+            <tr>
+                <td>${p.product_name}</td>
+                <td>${p.category}</td>
+                <td>₹${p.price}</td>
+                <td>${p.stock} units</td>
+                <td>
+                    <button class="delete-btn" onclick="editProduct(${p.id}, '${p.product_name}', '${p.category}', ${p.price}, ${p.stock})">
+                        <i class='bx bx-edit'></i>
+                    </button>
+
+                    <button class="delete-btn" onclick="deleteProduct(${p.id})">
+                        <i class='bx bx-trash'></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+
+          tbody.innerHTML += row;
+        });
+      }
+      async function deleteProduct(productId) {
+        if (!confirm("Are you sure you want to delete this product?")) return;
+
+        try {
+          const response = await fetch(`${BASE_URL}/products/${productId}`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ shop_id: SHOP_ID }), // Matches your backend route requirement
+          });
+
+          if (response.ok) {
+            fetchProducts(); // Refresh the list
+          }
+        } catch (err) {
+          console.error("Error deleting product:", err);
+        }
+      }
+      function createInventoryChart(products) {
+        const categoryTotals = {};
+
+        products.forEach((product) => {
+          const category = product.category;
+
+          const stock = Number(product.stock);
+
+          if (categoryTotals[category]) {
+            categoryTotals[category] += stock;
+          } else {
+            categoryTotals[category] = stock;
+          }
+        });
+
+        const labels = Object.keys(categoryTotals);
+
+        const values = Object.values(categoryTotals);
+
+        const ctx = document.getElementById("inventoryChart").getContext("2d");
+
+        if (inventoryChart) {
+          inventoryChart.destroy();
         }
 
-        // 2. CREATE Operation: Add new product to backend via form submission
-        async function addProduct(e) {
-            e.preventDefault(); // Stop page from refreshing on form click
-            const form = document.getElementById('product-form');
-const editId = form.dataset.editId;
-            const payload = {
-                shop_id: SHOP_ID,
-                productName: document.getElementById('prod-name').value,
-                category: document.getElementById('prod-category').value,
-                price: document.getElementById('prod-price').value,
-                stock: document.getElementById('prod-stock').value
-            };
+        inventoryChart = new Chart(ctx, {
+          type: "bar",
 
-            try {
-                const response = await fetch(
-    editId 
-        ? `${BASE_URL}/products/${editId}`
-        : `${BASE_URL}/products`,
-        
-    {
-        method: editId ? 'PUT' : 'POST',
+          data: {
+            labels: labels,
 
-        headers: {
-            'Content-Type': 'application/json'
-        },
+            datasets: [
+              {
+                label: "Stock Quantity",
 
-        body: JSON.stringify(payload)
-    }
-);
+                data: values,
 
-                if (response.ok) {
-                    alert('Product Added Successfully!');
-                    document.getElementById('product-form').reset(); // Clear inputs
-                    form.reset();
-                    delete form.dataset.editId;
-                    fetchProducts(); // Refresh list to display it right away
-                }
-            } catch (err) {
-                console.error("Error creating product:", err);
-            }
-        }
-        function editProduct(id, name, category, price, stock) {
-
-    // Fill form inputs with existing values
-    document.getElementById('prod-name').value = name;
-    document.getElementById('prod-category').value = category;
-    document.getElementById('prod-price').value = price;
-    document.getElementById('prod-stock').value = stock;
-
-    // Save product id temporarily
-    document.getElementById('product-form').dataset.editId = id;
-}
-        // 3. DELETE Operation: Remove a product
-        async function deleteProduct(productId) {
-            if (!confirm("Are you sure you want to delete this product?")) return;
-
-            try {
-                const response = await fetch(`${BASE_URL}/products/${productId}`, {
-                    method: 'DELETE',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ shop_id: SHOP_ID }) // Matches your backend route requirement
-                });
-
-                if (response.ok) {
-                    fetchProducts(); // Refresh the list
-                }
-            } catch (err) {
-                console.error("Error deleting product:", err);
-            }
-        }
+                backgroundColor: ["#0af", "#2ecc71", "#f1c40f", "#e74c3c"],
+              },
+            ],
+          },
+        });
+      }
     </script>
-</body>
+  </body>
 </html>

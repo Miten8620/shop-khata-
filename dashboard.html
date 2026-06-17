@@ -1,250 +1,436 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Shop Dashboard</title>
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-   
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
 
-        body { 
-            display: flex; 
-            background-color: #081b29; 
-            color: #fff;
-            min-height: 100vh;
-        }
+      body {
+        display: flex;
+        background-color: #081b29;
+        color: #fff;
+        min-height: 100vh;
+      }
 
-        .sidebar { 
-            width: 260px; 
-            background: rgba(0, 0, 0, 0.2); 
-            border-right: 2px solid #0af;
-            box-shadow: 5px 0 15px rgba(0, 170, 255, 0.1);
-            padding: 30px 0; 
-            display: flex;
-            flex-direction: column;
-        }
-        .sidebar h2 { 
-            text-align: center; 
-            margin-bottom: 40px; 
-            color: #0af;
-            font-size: 32px;
-            text-shadow: 0 0 10px rgba(0, 170, 255, 0.5);
-        }
-        .sidebar ul { list-style: none; }
-        .sidebar ul li { 
-            padding: 15px 30px; 
-            border-bottom: 1px solid rgba(0, 170, 255, 0.2);
-            transition: .4s ease;
-        }
-        .sidebar ul li a { 
-            color: #fff; 
-            text-decoration: none; 
-            display: flex; 
-            align-items: center; 
-            gap: 15px; 
-            font-size: 16px;
-            transition: .4s ease;
-        }
-        .sidebar ul li a i {
-            font-size: 22px;
-            color: #0af;
-        }
-        .sidebar ul li:hover { 
-            background: rgba(0, 170, 255, 0.1); 
-            border-left: 4px solid #0af;
-        }
-        .sidebar ul li:hover a { color: #0af; }
+      .sidebar {
+        width: 260px;
+        background: rgba(0, 0, 0, 0.2);
+        border-right: 2px solid #0af;
+        box-shadow: 5px 0 15px rgba(0, 170, 255, 0.1);
+        padding: 30px 0;
+        display: flex;
+        flex-direction: column;
+      }
+      .sidebar h2 {
+        text-align: center;
+        margin-bottom: 40px;
+        color: #0af;
+        font-size: 32px;
+        text-shadow: 0 0 10px rgba(0, 170, 255, 0.5);
+      }
+      .sidebar ul {
+        list-style: none;
+      }
+      .sidebar ul li {
+        padding: 15px 30px;
+        border-bottom: 1px solid rgba(0, 170, 255, 0.2);
+        transition: 0.4s ease;
+      }
+      .sidebar ul li a {
+        color: #fff;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        font-size: 16px;
+        transition: 0.4s ease;
+      }
+      .sidebar ul li a i {
+        font-size: 22px;
+        color: #0af;
+      }
+      .sidebar ul li:hover {
+        background: rgba(0, 170, 255, 0.1);
+        border-left: 4px solid #0af;
+      }
+      .sidebar ul li:hover a {
+        color: #0af;
+      }
 
-        .main-content { 
-            flex: 1; 
-            padding: 30px 40px; 
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
+      .main-content {
+        flex: 1;
+        padding: 30px 40px;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+      }
 
-        .header { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            background: transparent; 
-            padding: 20px 30px; 
-            border-radius: 10px; 
-            border: 2px solid #0af;
-            box-shadow: 0 0 15px rgba(0, 170, 255, 0.2);
-        }
-        .header h3 { font-size: 24px; font-weight: 500;}
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: transparent;
+        padding: 20px 30px;
+        border-radius: 10px;
+        border: 2px solid #0af;
+        box-shadow: 0 0 15px rgba(0, 170, 255, 0.2);
+      }
+      .header h3 {
+        font-size: 24px;
+        font-weight: 500;
+      }
 
-        .cards { 
-            display: flex; 
-            gap: 30px; 
-            flex-wrap: wrap;
-        }
-        .card { 
-            flex: 1; 
-            min-width: 250px;
-            background: transparent; 
-            padding: 30px 20px; 
-            border-radius: 10px; 
-            border: 2px solid #0af;
-            box-shadow: 0 0 15px rgba(0, 170, 255, 0.1);
-            text-align: center; 
-            transition: .4s ease;
-        }
-        .card:hover {
-            box-shadow: 0 0 25px #0af;
-            transform: translateY(-5px);
-        }
-        .card i { 
-            margin-bottom: 15px;
-            text-shadow: 0 0 10px currentColor;
-        }
-        .card h3 { 
-            color: #fff; 
-            font-size: 18px; 
-            font-weight: 500;
-            margin-bottom: 10px;
-        }
-        .card p { 
-            font-size: 28px; 
-            font-weight: 700; 
-            color: #0af;
-            text-shadow: 0 0 5px rgba(0, 170, 255, 0.5);
-        }
+      .cards {
+        display: flex;
+        gap: 30px;
+        flex-wrap: wrap;
+      }
+      .card {
+        flex: 1;
+        min-width: 250px;
+        background: transparent;
+        padding: 30px 20px;
+        border-radius: 10px;
+        border: 2px solid #0af;
+        box-shadow: 0 0 15px rgba(0, 170, 255, 0.1);
+        text-align: center;
+        transition: 0.4s ease;
+      }
+      .card:hover {
+        box-shadow: 0 0 25px #0af;
+        transform: translateY(-5px);
+      }
+      .card i {
+        margin-bottom: 15px;
+        text-shadow: 0 0 10px currentColor;
+      }
+      .card h3 {
+        color: #fff;
+        font-size: 18px;
+        font-weight: 500;
+        margin-bottom: 10px;
+      }
+      .card p {
+        font-size: 28px;
+        font-weight: 700;
+        color: #0af;
+        text-shadow: 0 0 5px rgba(0, 170, 255, 0.5);
+      }
+      .chart-container {
+        border: 2px solid #0af;
+
+        border-radius: 10px;
+
+        padding: 20px;
+
+        margin-top: 20px;
+
+        background: rgba(0, 0, 0, 0.2);
+
+        box-shadow: 0 0 15px rgba(0, 170, 255, 0.1);
+      }
+
+      .chart-container h2 {
+        color: #0af;
+
+        margin-bottom: 20px;
+      }
+
+      #inventoryChart {
+        width: 100%;
+
+        height: 400px;
+      }
     </style>
-</head>
-<body>
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
     <div class="sidebar">
-        <h2>My Shop</h2>
-        <ul>
-            <li class="active"><a href="dashboard.html"><i class='bx bxs-dashboard'></i> Dashboard</a></li>
-            <li><a href="inventory.html"><i class='bx bx-box'></i> Inventory</a></li>
-            <li><a href="payment.html"><i class='bx bx-rupee'></i> Payments</a></li>
-        </ul>
+      <h2>My Shop</h2>
+      <ul>
+        <li class="active">
+          <a href="dashboard.html"
+            ><i class="bx bxs-dashboard"></i> Dashboard</a
+          >
+        </li>
+        <li>
+          <a href="inventory.html"><i class="bx bx-box"></i> Inventory</a>
+        </li>
+        <li>
+          <a href="payment.html"><i class="bx bx-rupee"></i> Payments</a>
+        </li>
+      </ul>
     </div>
 
     <div class="main-content">
-        <div class="header">
-            <h3 id="welcome-text">Loading Shop Details...</h3>
+      <div class="header">
+        <h3 id="welcome-text">Loading Shop Details...</h3>
+      </div>
+      <div class="chart-container">
+        <h2>Inventory Distribution</h2>
+
+        <canvas id="inventoryChart"></canvas>
+      </div>
+      <div class="cards">
+        <div class="card">
+          <i class="bx bxs-store" style="font-size: 45px; color: #3498db"></i>
+          <h3 id="shop-name">Shop Name</h3>
+          <p id="owner-name" style="font-size: 20px">Owner Name</p>
+          <p id="shop-mobile" style="font-size: 16px; margin-top: 5px">
+            Mobile
+          </p>
+        </div>
+        <div class="card">
+          <i class="bx bx-package" style="font-size: 45px; color: #f1c40f"></i>
+          <h3>Total Products</h3>
+          <p id="total-products">0</p>
+        </div>
+        <div class="card">
+          <i
+            class="bx bx-dollar-circle"
+            style="font-size: 45px; color: #2ecc71"
+          ></i>
+          <h3>Total Udhaar</h3>
+          <p id="total-udhaar">₹0</p>
         </div>
 
-        <div class="cards">
-            <div class="card">
-                <i class='bx bxs-store' style="font-size: 45px; color: #3498db;"></i>
-                <h3 id="shop-name">Shop Name</h3>
-                <p id="owner-name" style="font-size: 20px;">Owner Name</p>
-                <p id="shop-mobile" style="font-size: 16px; margin-top: 5px;">Mobile</p>
-            </div>
-            <div class="card">
-    <i class='bx bx-package' style="font-size: 45px; color: #f1c40f;"></i>
-    <h3>Total Products</h3>
-    <p id="total-products">0</p>
-</div>
-            <div class="card">
-                <i class='bx bx-dollar-circle' style="font-size: 45px; color: #2ecc71;"></i>
-                <h3>Total Udhaar</h3>
-                <p id="total-udhaar">₹0</p> 
-            </div>
-            
-            <div class="card">
-                <i class='bx bx-rupee' style="font-size: 45px; color: #e74c3c;"></i>
-                <h3>Total Payment Paid</h3>
-                <p id="total-paid">₹0</p>
-            </div>
-            <div class="card">
-    <i class='bx bx-wallet' style="font-size: 45px; color: #9b59b6;"></i>
-    <h3>Inventory Value</h3>
-    <p id="inventory-value">₹0</p>
-</div>
-<div class="card">
-    <i class='bx bx-error-circle' style="font-size: 45px; color: #e74c3c;"></i>
-    <h3>Low Stock Items</h3>
-    <p id="low-stock-count">0</p>
-</div>
+        <div class="card">
+          <i class="bx bx-rupee" style="font-size: 45px; color: #e74c3c"></i>
+          <h3>Total Payment Paid</h3>
+          <p id="total-paid">₹0</p>
         </div>
+        <div class="card">
+          <i class="bx bx-wallet" style="font-size: 45px; color: #9b59b6"></i>
+          <h3>Inventory Value</h3>
+          <p id="inventory-value">₹0</p>
+        </div>
+        <div class="card" id="low-stock-card">
+          <i
+            class="bx bx-error-circle"
+            style="font-size: 45px; color: #e74c3c"
+          ></i>
+          <h3>Low Stock Items</h3>
+          <p id="low-stock-count">0</p>
+        </div>
+        <div
+          id="low-stock-list"
+          style="
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            border: 2px solid #e74c3c;
+            border-radius: 10px;
+          "
+        >
+          <h3>Low Stock Products</h3>
+
+          <ul id="low-stock-items"></ul>
+        </div>
+      </div>
     </div>
 
     <script>
-        // Since we are skipping login, we hardcode shop_id = 1 for testing
-        const SHOP_ID = 1; 
-        const BASE_URL = 'http://localhost:3000';
+      // Since we are skipping login, we hardcode shop_id = 1 for testing
+      const SHOP_ID = 1;
+      const BASE_URL = "http://localhost:3000";
+      let allProducts = [];
+      const lowStockCard = document.getElementById("low-stock-card");
 
-        // This function automatically runs when the page loads
-        document.addEventListener('DOMContentLoaded', async () => {
-            await fetchShopProfile();
-            await fetchDashboardMetrics();
+      // This function automatically runs when the page loads
+      document.addEventListener("DOMContentLoaded", async () => {
+        await fetchShopProfile();
+        await fetchDashboardMetrics();
+      });
+
+      // 1. Fetch the Shop Owner's profile details
+      async function fetchShopProfile() {
+        try {
+          const response = await fetch(`${BASE_URL}/api/shop/${SHOP_ID}`);
+          if (response.ok) {
+            const shop = await response.json();
+
+            // Update the HTML text with database values
+            document.getElementById("welcome-text").innerText =
+              `Welcome Back, ${shop.owner_name}!`;
+            document.getElementById("shop-name").innerText = shop.shop_name;
+            document.getElementById("owner-name").innerText = shop.owner_name;
+            document.getElementById("shop-mobile").innerText = shop.mobile;
+          }
+        } catch (error) {
+          console.error("Error fetching shop profile:", error);
+        }
+      }
+
+      // 2. Fetch payments, then calculate total Udhaar and total Paid
+      async function fetchDashboardMetrics() {
+        try {
+          const response = await fetch(`${BASE_URL}/payments/${SHOP_ID}`);
+          if (response.ok) {
+            const payments = await response.json();
+            const productResponse = await fetch(
+              `${BASE_URL}/products/${SHOP_ID}`,
+            );
+            const products = await productResponse.json();
+            allProducts = products;
+            createInventoryChart(products);
+            let totalUdhaar = 0;
+            let totalPaid = 0;
+            let inventoryValue = 0;
+            let lowStockCount = 0;
+            const totalProducts = products.length;
+            // Loop through all database records and add up values
+            payments.forEach((record) => {
+              // Ensure it behaves as a number, not text
+              const amount = Number(record.amount);
+
+              if (record.payment_type.toLowerCase() === "udhaar") {
+                totalUdhaar += amount;
+              } else {
+                totalPaid += amount;
+              }
+            });
+            products.forEach((product) => {
+              const value = Number(product.price) * Number(product.stock);
+
+              inventoryValue += value;
+
+              if (Number(product.stock) < 10) {
+                lowStockCount++;
+              }
+            });
+            // Format numbers neatly (e.g., ₹12,000)
+            document.getElementById("total-udhaar").innerText =
+              `₹${totalUdhaar.toLocaleString()}`;
+            document.getElementById("total-paid").innerText =
+              `₹${totalPaid.toLocaleString()}`;
+            document.getElementById("total-products").innerText = totalProducts;
+            document.getElementById("inventory-value").innerText =
+              `₹${inventoryValue.toLocaleString()}`;
+            document.getElementById("low-stock-count").innerText =
+              lowStockCount;
+          }
+        } catch (error) {
+          console.error("Error fetching dashboard calculations:", error);
+        }
+      }
+      lowStockCard.addEventListener("click", () => {
+        const lowStockList = document.getElementById("low-stock-list");
+        const lowStockItems = document.getElementById("low-stock-items");
+
+        lowStockList.style.display = "block";
+
+        lowStockItems.innerHTML = "";
+
+        let lowStockFound = false;
+
+        allProducts.forEach((product) => {
+          if (Number(product.stock) < 10) {
+            lowStockFound = true;
+
+            lowStockItems.innerHTML += `
+            <li>
+                ${product.product_name} - Stock: ${product.stock}
+            </li>
+        `;
+          }
         });
 
-        // 1. Fetch the Shop Owner's profile details
-        async function fetchShopProfile() {
-            try {
-                const response = await fetch(`${BASE_URL}/api/shop/${SHOP_ID}`);
-                if (response.ok) {
-                    const shop = await response.json();
-                    
-                    // Update the HTML text with database values
-                    document.getElementById('welcome-text').innerText = `Welcome Back, ${shop.owner_name}!`;
-                    document.getElementById('shop-name').innerText = shop.shop_name;
-                    document.getElementById('owner-name').innerText = shop.owner_name;
-                    document.getElementById('shop-mobile').innerText = shop.mobile;
-                }
-            } catch (error) {
-                console.error("Error fetching shop profile:", error);
-            }
+        if (!lowStockFound) {
+          lowStockItems.innerHTML = `
+        <li>All products are sufficiently stocked ✅</li>
+    `;
+        }
+      });
+      let inventoryChart;
+
+      function createInventoryChart(products) {
+        const categoryTotals = {};
+
+        products.forEach((product) => {
+          const category = product.category;
+          const stock = Number(product.stock);
+
+          if (categoryTotals[category]) {
+            categoryTotals[category] += stock;
+          } else {
+            categoryTotals[category] = stock;
+          }
+        });
+
+        const labels = Object.keys(categoryTotals);
+        const values = Object.values(categoryTotals);
+
+        const ctx = document.getElementById("inventoryChart").getContext("2d");
+
+        if (inventoryChart) {
+          inventoryChart.destroy();
         }
 
-        // 2. Fetch payments, then calculate total Udhaar and total Paid
-        async function fetchDashboardMetrics() {
-            try {
-                const response = await fetch(`${BASE_URL}/payments/${SHOP_ID}`);
-                if (response.ok) {
-                    const payments = await response.json();
-                    const productResponse = await fetch(`${BASE_URL}/products/${SHOP_ID}`);
-                    const products = await productResponse.json();
-                    let totalUdhaar = 0;
-                    let totalPaid = 0;
-                    let inventoryValue = 0;
-                    const totalProducts = products.length;
-                    // Loop through all database records and add up values
-                    payments.forEach(record => {
-                        // Ensure it behaves as a number, not text
-                        const amount = Number(record.amount); 
-                        
-                        if (record.payment_type.toLowerCase() === 'udhaar') {
-                            totalUdhaar += amount;
-                        } else {
-                            totalPaid += amount;
-                        }
-                    });
-                    products.forEach(product => {
+        inventoryChart = new Chart(ctx, {
+          type: "bar",
 
-    const value = Number(product.price) * Number(product.stock);
+          data: {
+            labels: labels,
 
-    inventoryValue += value;
-});
-                    // Format numbers neatly (e.g., ₹12,000)
-                    document.getElementById('total-udhaar').innerText = `₹${totalUdhaar.toLocaleString()}`;
-                    document.getElementById('total-paid').innerText = `₹${totalPaid.toLocaleString()}`;
-                    document.getElementById('total-products').innerText = totalProducts;
-                    document.getElementById('inventory-value').innerText =
-    `₹${inventoryValue.toLocaleString()}`;
-                    document.getElementById('inventory-value').innerText =
-    `₹${inventoryValue.toLocaleString()}`;
-                }
-            } catch (error) {
-                console.error("Error fetching dashboard calculations:", error);
-            }
-        }
+            datasets: [
+              {
+                label: "Stock Quantity",
+                data: values,
+
+                backgroundColor: [
+                  "#0af",
+                  "#2ecc71",
+                  "#f1c40f",
+                  "#e74c3c",
+                  "#9b59b6",
+                  "#1abc9c",
+                ],
+              },
+            ],
+          },
+
+          options: {
+            responsive: true,
+
+            plugins: {
+              legend: {
+                labels: {
+                  color: "white",
+                },
+              },
+            },
+
+            scales: {
+              x: {
+                ticks: {
+                  color: "white",
+                },
+              },
+
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  color: "white",
+                },
+              },
+            },
+          },
+        });
+      }
     </script>
-</body>
+  </body>
 </html>
