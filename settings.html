@@ -145,6 +145,76 @@
             z-index: -1; transition: .5s;
         }
         .save-btn:hover::before { top: 0; }
+        /* --- RESPONSIVE MEDIA QUERIES --- */
+
+/* For Tablet & Smaller Screens */
+@media (max-width: 992px) {
+  .cards {
+    gap: 20px;
+  }
+  .card {
+    min-width: calc(50% - 20px); /* 2 cards per row */
+  }
+}
+
+/* For Mobile Devices */
+@media (max-width: 768px) {
+  body {
+    flex-direction: column; /* Stacks sidebar on top of content if needed */
+  }
+
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 2px solid #0af;
+    padding: 15px 0;
+  }
+
+  .sidebar h2 {
+    margin-bottom: 15px;
+    font-size: 24px;
+  }
+
+  .sidebar ul {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+  }
+
+  .sidebar ul li {
+    padding: 10px 15px;
+    border-bottom: none;
+  }
+
+  .sidebar ul li:hover {
+    border-left: none;
+    border-bottom: 2px solid #0af;
+  }
+
+  .main-content {
+    padding: 20px;
+    gap: 20px;
+  }
+
+  .header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+
+  .card {
+    min-width: 100%; /* 1 card per row */
+  }
+  
+  /* Form responsiveness for inventory/payments */
+  .form-group {
+    flex-direction: column;
+  }
+  
+  .form-group input, .form-group select {
+    width: 100%;
+  }
+}
     </style>
 </head>
 <body>
